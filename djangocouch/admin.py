@@ -1,4 +1,4 @@
 from django.contrib import admin
-from bhoma.apps.djangocouch.models import DemoModel
+from djangocouch.models import CouchModel
 
-admin.site.register(DemoModel)
+admin.site.register(CouchModel)

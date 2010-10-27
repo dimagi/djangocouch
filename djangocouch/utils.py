@@ -1,13 +1,14 @@
-from bhoma.apps.djangocouch.exceptions import ModelPreconditionNotMet
+import logging
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from couchdbkit.ext.django.loading import get_db
+from django.db.models.manager import Manager
 from django.db.models.fields.related import ManyToManyField, ForeignKey
-from bhoma.apps.djangocouchuser import const
+from couchdbkit.ext.django.loading import get_db
 from couchdbkit.resource import ResourceNotFound, ResourceConflict
 from couchdbkit.ext.django.schema import dict_to_json as couchdbkit_dict_to_json,\
     Document, value_to_json
-import logging
-from django.conf import settings
+from djangocouchuser import const
+from djangocouch.exceptions import ModelPreconditionNotMet
 
 DEFAULT_DJANGO_TYPE_KEY = "django_type"
 MAX_COUCH_SAVE_TRIES    = 3
@@ -18,8 +19,8 @@ def futon_url(object_id):
         if "://" in server and "@" in server:
             return "%s://%s" % (server[0:server.index("://")], server[server.index("@") + 1:])
     return "%s/_utils/document.html?%s/%s" % \
-                                (strip_credentials(settings.BHOMA_COUCH_SERVER), 
-                                 settings.BHOMA_COUCH_DATABASE_NAME,
+                                (strip_credentials(settings.COUCH_SERVER_ROOT), 
+                                 settings.COUCH_DATABASE_NAME,
                                  object_id)
 
 def model_to_dict(instance, fields=None, exclude=None, 
@@ -49,7 +50,10 @@ def model_to_dict(instance, fields=None, exclude=None,
                 data[f.name] = [obj.pk for obj in f.value_from_object(instance)]
         else:
             # try to serialize if if possible
-            data[f.name] = value_to_json(f.value_from_object(instance))
+            val = value_to_json(f.value_from_object(instance))
+            if not isinstance(val,basestring):
+                continue
+            data[f.name] = val
 
     ct = ContentType.objects.get_for_model(instance)
     # include the model class as well

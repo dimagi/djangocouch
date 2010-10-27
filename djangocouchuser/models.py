@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from bhoma.apps.djangocouch.models import CouchModel
+from djangocouch.models import CouchModel
 
 class CouchUserProfile(CouchModel):
     """
@@ -14,4 +14,4 @@ class CouchUserProfile(CouchModel):
         abstract = True
 
 # load our signals.
-import bhoma.apps.djangocouchuser.signals 
+import djangocouchuser.signals

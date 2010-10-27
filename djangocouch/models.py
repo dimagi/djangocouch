@@ -1,6 +1,6 @@
-from bhoma.apps.djangoplus.fields import UUIDField
 from django.db import models
-from bhoma.apps.djangocouch.utils import DEFAULT_DJANGO_TYPE_KEY, model_to_dict, dict_to_json
+from djangocouch.fields import UUIDField
+from djangocouch.utils import DEFAULT_DJANGO_TYPE_KEY, model_to_dict, dict_to_json
 
 class CouchModel(models.Model):
     """
@@ -32,12 +32,5 @@ class CouchModel(models.Model):
     class Meta:
         abstract = True
 
-class DemoModel(CouchModel):
-    
-    name = models.CharField(max_length=100)
-    
-    def __unicode__(self):
-        return self.name
-
 # load our signals.
-from bhoma.apps.djangocouch import signals 
+from djangocouch import signals

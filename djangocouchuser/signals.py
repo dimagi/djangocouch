@@ -1,8 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
-from bhoma.apps.djangocouch.utils import check_model_preconditions_for_save,\
+from djangocouch.utils import check_model_preconditions_for_save,\
     model_to_dict, save_dict, model_to_doc
-from bhoma.apps.djangocouch.exceptions import ModelPreconditionNotMet
-from bhoma.apps.djangocouchuser import const
+from djangocouch.exceptions import ModelPreconditionNotMet
+from djangocouchuser import const
 
 def couch_user_post_save(sender, instance, created, **kwargs): 
     """
