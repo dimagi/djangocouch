@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from bhoma.apps.djangocouch.utils import futon_url
+from djangocouch.utils import futon_url
 
 def futon(req, object_id):
     """

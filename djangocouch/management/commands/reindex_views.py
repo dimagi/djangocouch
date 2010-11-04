@@ -1,7 +1,7 @@
 import logging
 from django.conf import settings
 from django.core.management.base import LabelCommand
-from bhoma.utils.couch.database import get_db, get_view_names
+from dimagi.utils.couch.database import get_db, get_view_names
 from datetime import datetime
 
 class Command(LabelCommand):
