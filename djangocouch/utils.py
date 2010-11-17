@@ -1,7 +1,7 @@
 import logging
+from django.db.models import Manager
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.db.models.manager import Manager
 from django.db.models.fields.related import ManyToManyField, ForeignKey
 from couchdbkit.ext.django.loading import get_db
 from couchdbkit.resource import ResourceNotFound, ResourceConflict
@@ -51,7 +51,8 @@ def model_to_dict(instance, fields=None, exclude=None,
         else:
             # try to serialize if if possible
             val = value_to_json(f.value_from_object(instance))
-            if not isinstance(val,basestring):
+            if isinstance(val, Manager):
+                # manager's aren't jsonifiable
                 continue
             data[f.name] = val
 
