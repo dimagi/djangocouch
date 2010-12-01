@@ -95,8 +95,12 @@ def model_to_doc(instance, fields=None, exclude=None,
             setattr(to_return, f.name,
                     obj.pk if obj is not None else None)
         else:
-            setattr(to_return, f.name,f.value_from_object(instance))
-            # data[f.name] = f.value_from_object(instance)
+            # try to serialize if if possible
+            val = f.value_from_object(instance)
+            if isinstance(val, Manager):
+                # manager's aren't jsonifiable
+                continue
+            setattr(to_return, f.name, val)
 
     ct = ContentType.objects.get_for_model(instance)
     # include the model class as well
