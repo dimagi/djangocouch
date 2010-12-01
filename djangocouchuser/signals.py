@@ -22,6 +22,11 @@ def couch_user_post_save(sender, instance, created, **kwargs):
     if user is None:
         raise ModelPreconditionNotMet("You are saving a profile without an attached user!")
     
+    if user.get_profile().is_commcare_user: 
+        # djangocouch hack: commcare users are stored within the global cchq user
+        # so they don't need their own couch user
+        # todo: pull this out of djangocouch and into something more cchq-y
+        return
     instance_dict = model_to_dict(instance)
     # now change the user to actually be a full user dict, not just the 
     # pk.  
