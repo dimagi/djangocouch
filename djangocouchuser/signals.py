@@ -12,7 +12,8 @@ def couch_user_post_save(sender, instance, created, **kwargs):
     
         The instance of the model passed in should be an extension of CouchModel
         The inherited _id field never changes after writing
-        You are always willing to overwrite the latest changes without warning
+        When django models are updated, something or someone else will take care of
+        propagating that update to the couch model
       
     """
     
@@ -26,6 +27,8 @@ def couch_user_post_save(sender, instance, created, **kwargs):
         # djangocouch hack: commcare users are stored within the global cchq user
         # so they don't need their own couch user
         # todo: pull this out of djangocouch and into something more cchq-y
+        return
+    if not created:
         return
     instance_dict = model_to_dict(instance)
     # now change the user to actually be a full user dict, not just the 
