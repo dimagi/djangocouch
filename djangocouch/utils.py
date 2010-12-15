@@ -162,7 +162,9 @@ def save_dict(db, instance_dict, created):
     if not created:
         try:
             previous_doc = db.get(instance_dict[const.COUCH_ID])
-            instance_dict[const.COUCH_REV] = previous_doc[const.COUCH_REV]
+            #instance_dict[const.COUCH_REV] = previous_doc[const.COUCH_REV]
+            previous_doc.update(instance_dict)
+            instance_dict = previous_doc
         except ResourceNotFound:
             logging.warn("Expected resource for doc %s but was missing..." %\
                          instance_dict[const.COUCH_ID])
