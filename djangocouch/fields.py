@@ -205,17 +205,21 @@ class UUIDField(CharField):
             raise UUIDVersionError("UUID version %s is not valid." % self.version)
 
     def pre_save(self, model_instance, add):
-        if self.auto and add:
+        value = super(UUIDField, self).pre_save(model_instance, add)
+        if self.auto and not value:
             value = unicode(self.create_uuid())
             setattr(model_instance, self.attname, value)
-            return value
-        else:
-            value = super(UUIDField, self).pre_save(model_instance, add)
-            if self.auto and not value:
-                value = unicode(self.create_uuid())
-                setattr(model_instance, self.attname, value)
         return value
-    
+
+# south needs this magic to use this field.  If south isn't around
+# we shouldn't care.
+# Explanation: http://south.aeracode.org/wiki/MyFieldsDontWork
+try:
+    from south.modelsinspector import add_introspection_rules
+    add_introspection_rules([], ["^djangocouch\.fields\.UUIDField"])
+except ImportError:
+    pass
+
 """
 A field which can store any pickleable object in the database. 
 It is database-agnostic, and should work with any database 
