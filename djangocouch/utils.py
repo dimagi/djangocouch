@@ -18,8 +18,9 @@ def futon_url(object_id):
         # super janky
         if "://" in server and "@" in server:
             return "%s://%s" % (server[0:server.index("://")], server[server.index("@") + 1:])
+        return server
     return "%s/_utils/document.html?%s/%s" % \
-                                (strip_credentials(settings.COUCH_SERVER_ROOT), 
+                                (strip_credentials(settings.COUCH_SERVER), 
                                  settings.COUCH_DATABASE_NAME,
                                  object_id)
 
