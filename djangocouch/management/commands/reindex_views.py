@@ -5,7 +5,7 @@ from dimagi.utils.couch.database import get_db, get_view_names
 from datetime import datetime
 
 class Command(LabelCommand):
-    help = "Listens for patient conflicts and resolves them."
+    help = "Reindexes your couch views."
     args = ""
     label = ""
      
@@ -25,7 +25,6 @@ class Command(LabelCommand):
             
             logging.debug("Elapsed time for %s: %s" % (view, datetime.now() - starttime))
             print ("Elapsed time for %s: %s" % (view, datetime.now() - starttime))
-
             
                 
     def __del__(self):
