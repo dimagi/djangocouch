@@ -17,7 +17,7 @@ class Command(LabelCommand):
             logging.debug("reindexing view: %s" % view)
             print "reindexing view: %s" % view
             try:
-                for val in db.view(view):
+                for val in db.view(view, limit=1):
                     # we have to call it once, simulated by iterating to the first element
                     break
             except Exception, e:
