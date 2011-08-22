@@ -194,7 +194,7 @@ class UUIDField(CharField):
         if not self.version or self.version==4:
             return uuid.uuid4()
         elif self.version==1:
-            return uuid.uuid4(self.node, self.clock_seq)
+            return uuid.uuid1(self.node, self.clock_seq)
         elif self.version==2:
             raise UUIDVersionError("UUID version 2 is not supported.")
         elif self.version==3:
