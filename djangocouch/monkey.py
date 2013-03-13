@@ -13,16 +13,9 @@ def default_resource_class():
 class PatchedServer(Server):
     # patch the database with our own custom default resource class
     def __init__(self, *args, **kwargs):
-        if kwargs.get('resource_class') == None:
+        if kwargs.get('resource_class') is None:
             kwargs['resource_class'] = default_resource_class()
-        return super(PatchedServer, self).__init__(*args, **kwargs)
-
-class PatchedDatabase(Database):
-    # patch the database with our own custom default resource class
-    def __init__(self, *args, **kwargs):
-        if kwargs.get('resource_class') == None:
-            kwargs['resource_class'] = default_resource_class()
-        return super(PatchedDatabase, self).__init__(*args, **kwargs)
+        super(PatchedServer, self).__init__(*args, **kwargs)
 
 def patch(resource_class):
     if isinstance(resource_class, basestring):
@@ -31,5 +24,4 @@ def patch(resource_class):
     # monkey patch the couchdbkit database to use our new custom
     # resource whenever it's not explicitly specified
     couchdbkit.client.Server = PatchedServer
-    couchdbkit.client.Database = PatchedDatabase
     couchdbkit.resource.CouchdbResource = resource_class
