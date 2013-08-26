@@ -254,7 +254,7 @@ class PickledObjectField(models.Field):
                 # If an error was raised, just return the plain value
                 return value
     
-    def get_db_prep_save(self, value):
+    def get_db_prep_save(self, value, connection=None):
         if value is not None and not isinstance(value, PickledObject):
             value = PickledObject(pickle.dumps(value))
         return value
@@ -262,7 +262,7 @@ class PickledObjectField(models.Field):
     def get_internal_type(self): 
         return 'TextField'
     
-    def get_db_prep_lookup(self, lookup_type, value):
+    def get_db_prep_lookup(self, lookup_type, value, connection=None, prepared=None):
         if lookup_type == 'exact' or lookup_type == 'iexact':
             value = self.get_db_prep_save(value)
             return super(PickledObjectField, self).get_db_prep_lookup(lookup_type, value)
